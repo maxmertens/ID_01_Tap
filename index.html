@@ -85,7 +85,7 @@ THE SOFTWARE.
 
     var light = false;
     var pressed = false;
-    var sound = false;
+    var soundIn = false;
 
 
     var output = document.getElementById('output');
@@ -97,22 +97,23 @@ THE SOFTWARE.
 
         hand: function (hand) {
 
-            // Funktion startet sobald die Hand 0.25 sek über dem Bildschirm ist
+            output.innerHTML = hand.pinchStrength.toPrecision(2);
+            //progress.style.width = hand.pinchStrength * 100 + '%';
+
+
+            // Sound spielt ab sobald die Hand über die Leap geht
             var timeVisible = hand.timeVisible;
             if(timeVisible > .05){
-                if(!sound) {
-                    $.playSound("http://www.noiseaddicts.com/samples_1w72b820/3724");
-                    sound = true;
+                if(!soundIn) {
+                    $.playSound("data/Elevator Ding-SoundBible.com-685385892");
+                    soundIn = true;
                 }
             }
 
             if(timeVisible < .05){
-                    sound = false;
+                soundIn = false;
             }
 
-
-            output.innerHTML = hand.pinchStrength.toPrecision(2);
-            //progress.style.width = hand.pinchStrength * 100 + '%';
 
 
             if (hand.pinchStrength <= 0.97 && pressed) {
