@@ -29,9 +29,6 @@ THE SOFTWARE.
     <script src='https://cdn.rawgit.com/admsev/jquery-play-sound/master/jquery.playSound.js'></script>
 
 
-
-
-
     <style class="codepen">
         body {
             font-family: 'Courier New', Helvetica, Arial, 'Lucida Grande', sans-serif;
@@ -85,47 +82,56 @@ THE SOFTWARE.
 
     var light = false;
     var pressed = false;
-    var soundIn = false;
+    var soundIn = true;
+    var soundOut = false;
+    var HandIn = false;
 
 
     var output = document.getElementById('output');
     var progress = document.getElementById('progress');
     var background = document.getElementById("bg");
 
-    // Set up the controller:
+
+    var controllerTest = Leap.loop(function(frame){
+
+        console.log(HandIn);
+
+        if (HandIn && soundIn) {
+            $.playSound("data/txting_press_b");
+            soundIn = false;
+        }
+        else if (!HandIn && !soundIn){
+            $.playSound("data/txting_press_a");
+            soundIn = true;
+        }
+
+        HandIn = false;
+
+    });
+
+
+    // Sobald die Hand über der Leap ist, wird die Funktion ausgeführtund wiederholt
     Leap.loop({background: true}, {
 
         hand: function (hand) {
-
+            console.log("handincheck" + HandIn)
+    HandIn = true;
             output.innerHTML = hand.pinchStrength.toPrecision(2);
             //progress.style.width = hand.pinchStrength * 100 + '%';
 
 
-            // Sound spielt ab sobald die Hand über die Leap geht
-//            var timeVisible = hand.timeVisible;
-//            if(timeVisible > .05){
-//                if(!soundIn) {
-//                    $.playSound("data/20_Strange_Hit");
-//                    soundIn = true;
-//                }
-//            }
-//
-//            if(timeVisible < .05){
-//                soundIn = false;
-//            }
-
-
-
+            //TAP
             if (hand.pinchStrength <= 0.97 && pressed) {
                 pressed = false;
-            };
+            }
+            ;
 
             if (hand.pinchStrength > 0.97 && !pressed) {
                 toggle();
                 pressed = true;
             }
 
-            function toggle () {
+            function toggle() {
 
                 if (light) {
                     background.style.opacity = 0;
@@ -138,7 +144,7 @@ THE SOFTWARE.
                 }
             }
 
-            console.log(light);
+//            console.log(soundOut);
         }
     });
 
