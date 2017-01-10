@@ -121,12 +121,12 @@ THE SOFTWARE.
 
 
             //TAP
-            if (hand.pinchStrength <= 0.97 && pressed) {
+            if (hand.pinchStrength <= 0.90 && pressed) {
                 pressed = false;
             }
             ;
 
-            if (hand.pinchStrength > 0.97 && !pressed) {
+            if (hand.pinchStrength > 0.90 && !pressed) {
                 toggle();
                 pressed = true;
             }
